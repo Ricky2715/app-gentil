@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1094532090293",
+    "project_id": "nexus-39cb1",
+    "storage_bucket": "nexus-39cb1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094532090293:android:0d59caa38f2b52f71231fc",
+        "android_client_info": {
+          "package_name": "com.voxinversa.nexus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDGHu8n4qoORr-xv-NvjUMm-yckFoX0ss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
