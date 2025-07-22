@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Funções auxiliares
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isValidUser() {
+      return request.auth.token.email_verified == true;
+    }
+
+    // Regras para coleção de usuários
+    match /users/{userId} {
+      allow read: if isAuthenticated() && isOwner(userId);
+      allow create: if isAuthenticated() && isOwner(userId);
+      allow update: if isAuthenticated() && isOwner(userId);
+      allow delete: if false; // Não permite deleção de usuários
+      
+      // Subcoleção de progresso do usuário
+      match /progress/{document=**} {
+        allow read: if isAuthenticated() && isOwner(userId);
+        allow write: if isAuthenticated() && isOwner(userId);
+      }
+      
+      // Subcoleção de microvitórias
+      match /microvitorias/{document=**} {
+        allow read: if isAuthenticated() && isOwner(userId);
+        allow write: if isAuthenticated() && isOwner(userId);
+      }
+    }
+    
+    // Regras para rituais
+    match /rituais/{ritualId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Apenas admin pode criar/modificar rituais
+    }
+    
+    // Regras para capítulos
+    match /capitulos/{capituloId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Apenas admin pode criar/modificar capítulos
+    }
+    
+    // Regras para pesquisas anônimas
+    match /pesquisas/{pesquisaId} {
+      allow read: if false; // Apenas admin pode ler todas as pesquisas
+      allow create: if isAuthenticated(); // Usuários autenticados podem criar pesquisas
+      allow update, delete: if false;
+    }
+    
+    // Regras para frases do dia
+    match /frases/{fraseId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Apenas admin pode modificar frases
+    }
+    
+    // Regras para ofertas/banners
+    match /ofertas/{ofertaId} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Apenas admin pode modificar ofertas
+    }
+    
+    // Regras para feedback
+    match /feedback/{feedbackId} {
+      allow create: if isAuthenticated(); // Permite criar feedback
+      allow read, update, delete: if false; // Apenas admin pode ler/modificar feedback
+    }
+  }
+}

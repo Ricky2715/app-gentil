@@ -1,0 +1,30 @@
+{
+  "short_name": "App Gentil",
+  "name": "Produtividade Gentil",
+  "description": "Transforme sua produtividade de forma gentil e sustentável",
+  "icons": [
+    {
+      "src": "/_next/static/media/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/_next/static/media/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/_next/static/media/badge.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "badge"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#A1CEDC",
+  "background_color": "#ffffff",
+  "gcm_sender_id": "103953800507"
+}

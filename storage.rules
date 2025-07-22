@@ -1,0 +1,37 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Funções auxiliares
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Regras para imagens de perfil dos usuários
+    match /users/{userId}/profile/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isOwner(userId)
+                  && request.resource.size < 5 * 1024 * 1024 // 5MB max
+                  && request.resource.contentType.matches('image/.*');
+    }
+    
+    // Regras para assets públicos (imagens de rituais, capítulos, etc)
+    match /public/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Apenas admin pode modificar assets públicos
+    }
+    
+    // Regras para uploads temporários
+    match /temp/{userId}/{fileName} {
+      allow read: if isAuthenticated() && isOwner(userId);
+      allow write: if isAuthenticated() && isOwner(userId)
+                  && request.resource.size < 10 * 1024 * 1024; // 10MB max
+      
+      // Automaticamente deleta arquivos após 24h
+      allow delete: if isAuthenticated() && isOwner(userId);
+    }
+  }
+}
